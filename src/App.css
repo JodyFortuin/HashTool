@@ -22,10 +22,23 @@
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
+  padding-top: 20px;
 }
 
 .App-link {
   color: #61dafb;
+}
+
+.loadingIcon {
+  height: 5em
+}
+
+.Search-Card{
+  margin-top: 20px
+}
+
+.grid {
+  margin-top: 40px;
 }
 
 @keyframes App-logo-spin {
