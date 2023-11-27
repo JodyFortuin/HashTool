@@ -1,20 +1,22 @@
-import React from 'react';
+import React, { MouseEventHandler } from 'react';
 import axios from 'axios';
 import './App.css';
-import './input.css';
+import './input.css'
 
-import {NextUIProvider} from "@nextui-org/react";
-import {Input, Card, CardHeader, CardBody, Image, Accordion, AccordionItem, Avatar} from "@nextui-org/react";
-import {SearchIcon} from "./SearchIcon";
+import { NextUIProvider } from "@nextui-org/react";
+import { Input, Card, CardHeader, CardBody, Image, Button } from "@nextui-org/react";
+import { SearchIcon } from "./SearchIcon";
 import { useState } from 'react';
+import { getRosesImageData } from './data/PopularSearchesMockData'
+import { getIcelandImageData } from './data/PopularSearchesMockData'
+import { getVerstappenImageData } from './data/PopularSearchesMockData'
+import { getDbxImageData } from './data/PopularSearchesMockData'
 
 interface HashTagResponseProps {
   data: {
     data: {
       count: number,
       items: {
-        caption_hashtags: string,
-        caption_text: string,
         comment_count: number,
         image_versions: {
           height: number,
@@ -49,16 +51,6 @@ const Test = (responseData : HashTagResponseProps) => (
                 src={responseData.data.data.items[i].image_versions[0].url}
                 width={270}
               />
-              {/* <Accordion isCompact>
-                <AccordionItem key="1" aria-label="Accordion 1" title="Caption">
-                <small className="text-default-500">{item.caption_text}</small>
-                </AccordionItem>
-              </Accordion> */}
-              {/* <Accordion isCompact>
-                <AccordionItem key={item.user.username} aria-label={item.user.username} title="Post Hashtags">
-                <small className="text-default-500">{item.caption_hashtags}</small>
-                </AccordionItem>
-              </Accordion> */}
             </CardBody>
           </Card>
     ))}
@@ -73,8 +65,6 @@ function App() {
       data: {
         count: 0,
         items: [{
-          caption_hashtags: "",
-          caption_text: "iufhsidhfshfds sdfsfsdinjsf",
           comment_count: 0,
           image_versions: [{
             height: 0,
@@ -96,9 +86,6 @@ function App() {
   async function handleSubmit(e: React.ChangeEvent<any>) {
     e.preventDefault();
   
-    console.error("input", e.target.input.value)
-    console.error("newinput", inputValue)
-    console.error(e)
     const options = {
       method: 'GET',
       url: 'https://instagram-scraper-api2.p.rapidapi.com/v1.1/hashtag',
@@ -114,14 +101,31 @@ function App() {
       const response = await axios.request(options);
       setIsLoading(false);
       setReturnData(response);
-      console.log("log response", response);
-      console.error("response", response)
     } catch (error) {
       console.error(error);
     }
   }
-  // const arrayDataItems = courses.map((course) => <li>{}</li>);
-  // {arrayDataItems.map(key => {
+
+  const getPopularSearches = (e: any) => {
+    setIsLoading(true);
+    switch(e.target.value) {
+      case "roses":
+        setReturnData(getRosesImageData());
+        break;
+      case "iceland":
+        setReturnData(getIcelandImageData());
+        break;
+      case "verstappen":
+        setReturnData(getVerstappenImageData());
+        break;
+      case "dbx":
+        setReturnData(getDbxImageData());
+        break;
+      default:
+    }
+    setIsLoading(false);
+  }
+
   return (
     <NextUIProvider>
       <form method="get" onSubmit={handleSubmit}>
@@ -133,7 +137,6 @@ function App() {
       <Input
         label="Search"
         isRequired
-        isClearable
         radius="lg"
         id="input"
         onChange={(event) =>
@@ -171,8 +174,22 @@ function App() {
       }
           </div>
 
-        {/* <h1>Number of posts displayed: {returnData.data.data.count}</h1> */}
-        
+        <small className="Popular-Header">Popular searches:</small>
+        <div className="Popular-Searches-Container">
+          <Button onClick={getPopularSearches} value="roses" color="danger" radius="full" variant="ghost">
+            #roses
+          </Button>
+          <Button onClick={getPopularSearches} value="iceland" color="danger" radius="full" variant="ghost">
+            #iceland
+          </Button>
+          <Button onClick={getPopularSearches} value="verstappen" id="verstappen" color="danger" radius="full" variant="ghost">
+            #verstappen
+          </Button>
+          <Button onClick={getPopularSearches} value="dbx" id="dbx" color="danger" radius="full" variant="ghost">
+            #dbx
+          </Button>
+        </div>
+
         <div className="grid gap-10 grid-cols-3 grid-rows-3">
           {(returnData.data.data.count !== 0) &&
             <Test {...returnData} />
@@ -184,7 +201,6 @@ function App() {
       </form>
     </NextUIProvider>
   );
-  // })}
 }
 
 export default App;

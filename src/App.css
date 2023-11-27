@@ -30,15 +30,25 @@
 }
 
 .loadingIcon {
-  height: 5em
+  height: 5em;
 }
 
-.Search-Card{
-  margin-top: 20px
+.Search-Card {
+  margin-top: 20px;
+}
+
+.Popular-Searches-Container {
+  display: flex;
+}
+
+.Popular-Header {
+  padding-top: 5px;
+  padding-bottom: 5px;
 }
 
 .grid {
   margin-top: 40px;
+  margin-bottom: 40px;
 }
 
 @keyframes App-logo-spin {
